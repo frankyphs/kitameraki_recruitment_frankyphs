@@ -21,11 +21,17 @@
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
+.feature-container{
+  margin: 0 0;
+  padding: 0 0;
+  width:  80%;
+}
+
 .sidebar-container button{
   border: none;
   font-size: 24px;
-  background-color: transparent;
-box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  background-color: #9DB2BF;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   padding: 30px;
   margin: 2px 5px;
   border-radius: 8px;
@@ -41,7 +47,7 @@ box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   border: none;
   font-size: 30px;
   color:#fff;
-  background-color: #9DB2BF;
+  background-color: #526D82;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   padding: 30px;
   margin: 2px 5px;
@@ -54,6 +60,7 @@ box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 
 .table-container{
   margin: 0 auto;
+  width: 100%;
 }
 
 .table-container table {
@@ -61,7 +68,8 @@ box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   border: 1px solid #ccc; /* Garis pada seluruh tabel */
   font-size: 28px;
   font-weight: 400;
-  margin: 20px 24px;
+  margin: 20px;
+  width: 90%;
 }
 
 .table-container th,
@@ -77,4 +85,15 @@ box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 /* Optional: Memberikan warna latar belakang bergantian pada baris data */
 .table-container tbody tr:nth-child(even) {
   background-color: #f9f9f9;
+}
+
+td button {
+  background-color: red;
+  border-style: none;
+  font-size: 20px;
+  font-weight: 400;
+  color: #fff;
+  border-radius: 4px;
+  margin: 2px 4px;
+  padding: 8px 10px;
 }
