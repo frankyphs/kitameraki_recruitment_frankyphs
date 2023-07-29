@@ -60,3 +60,28 @@ export const addTask = (payload) => async (dispatch) => {
     console.log(err);
   }
 };
+
+export const editTask = (id, payload) => async (dispatch) => {
+  try {
+    const data = {
+      title: payload.title,
+      description: payload.description,
+    };
+    const opt = {
+      method: "put",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    };
+
+    const response = await fetch(`${baseUrl}/tasks/${id}`, opt);
+    if (!response.ok) {
+      throw { name: "error", data: await response.json() };
+    }
+
+    dispatch(fetchTasks());
+  } catch (err) {
+    console.log(err);
+  }
+};

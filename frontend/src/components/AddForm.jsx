@@ -7,7 +7,6 @@ import { addTask } from "../actions/actionCreator";
 const AddForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const { tasks } = useSelector((state) => state);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -39,7 +38,11 @@ const AddForm = () => {
   return (
     <>
       <h1>Add Form</h1>
-      {error.show && <div style={{ color: "red" }}>{error.message}</div>}
+      {error.show && (
+        <div style={{ fontSize: "22px", color: "red", marginLeft: "14px" }}>
+          {error.message}
+        </div>
+      )}
       <div className="add-form-container">
         <h3>Input Task`s Name</h3>
         <TextField

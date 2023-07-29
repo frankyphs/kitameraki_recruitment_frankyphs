@@ -68,12 +68,11 @@
   text-align: center;
 }
 
-
-.nav-link:hover {
+.nav-link:hover,
+.active {
   color: white;
   background-color: #5F7D8E;
 }
-
 
 .feature-container h1{
   padding: 10px 18px;
