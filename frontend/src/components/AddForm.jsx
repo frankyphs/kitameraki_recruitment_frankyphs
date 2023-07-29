@@ -1,43 +1,62 @@
 import { useState } from "react";
 import { TextField, PrimaryButton } from "@fluentui/react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addTask } from "../actions/actionCreator";
 
 const AddForm = () => {
-  const [taskName, setTaskName] = useState("");
-  const [taskDescription, setTaskDescription] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  // const { tasks } = useSelector((state) => state);
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+  });
 
-  const handleTaskNameChange = (event, newValue) => {
-    setTaskName(newValue);
+  const [error, setError] = useState({
+    show: false,
+    message: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((form) => ({
+      ...form,
+      [name]: value,
+    }));
   };
 
-  const handleTaskDescriptionChange = (event, newValue) => {
-    setTaskDescription(newValue);
-  };
-
-  const handleSubmit = () => {
-    // Lakukan apa yang diperlukan ketika form disubmit
-    // Misalnya, tambahkan tugas ke daftar tugas, atau kirim data ke server, dll.
-    console.log("Task Name:", taskName);
-    console.log("Task Description:", taskDescription);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (formData.title.trim() === "" || formData.description.trim() === "") {
+      setError({ show: true, message: "Please fill all the field" });
+    } else {
+      dispatch(addTask(formData));
+      navigate("/");
+    }
   };
 
   return (
     <>
       <h1>Add Form</h1>
+      {error.show && <div style={{ color: "red" }}>{error.message}</div>}
       <div className="add-form-container">
         <h3>Input Task`s Name</h3>
         <TextField
-          value={taskName}
-          onChange={handleTaskNameChange}
+          value={formData.title}
+          onChange={handleChange}
           className="add-form-input"
+          name="title"
         />
 
         <h3>Input Task`s Description</h3>
         <TextField
-          value={taskDescription}
+          value={formData.description}
           multiline
           autoAdjustHeight
-          onChange={handleTaskDescriptionChange}
+          onChange={handleChange}
           className="add-form-input"
+          name="description"
         />
         <PrimaryButton className="add-form-button" onClick={handleSubmit}>
           Submit

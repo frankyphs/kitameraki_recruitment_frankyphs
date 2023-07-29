@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { TextField } from "@fluentui/react/lib/TextField";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTasks, deleteTasks } from "../actions/actionCreator";
 import {
   DefaultButton,
   Dialog,
@@ -9,59 +10,31 @@ import {
 } from "@fluentui/react";
 
 const Table = () => {
-  const [editingTaskId, setEditingTaskId] = useState(null);
-  const [deletingTaskId, setDeletingTaskId] = useState(null);
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: "Belajar Javascript",
-      description:
-        "Mengerjakan tugad Back-End dengan Node JS, PostgreSQL dan ExpressJs, Mengerjakan tugad Back-End dengan Node JS, PostgreSQL dan ExpressJs",
-    },
-    {
-      id: 2,
-      title: "Belajar Javascript",
-      description: "Mengerjakan tugad Front-End dengan VueJS",
-    },
-    {
-      id: 3,
-      title: "Belajar Javascript",
-      description: "Mengerjakan tugad Front-End dengan  ReactJS",
-    },
-    {
-      id: 4,
-      title: "Belajar Deploy",
-      description: "Deploy tugas server ke AWS EC2 dengan docker",
-    },
-  ]);
+  const { tasks } = useSelector((state) => state.tasks);
+  const dispatch = useDispatch();
+  const [deletingTask, setDeletingTask] = useState(null); // Ganti deletingTaskId dengan deletingTask
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const handleEditClick = (task) => {
-    setEditingTaskId(task.id);
+  const handleDeleteClick = (task) => {
+    setDeletingTask(task); // Simpan data tugas yang akan dihapus dalam state local
+    setIsDeleteModalOpen(true);
   };
 
-  const handleSaveClick = () => {
-    setEditingTaskId(null);
+  const handleDeleteConfirmation = () => {
+    if (deletingTask) {
+      dispatch(deleteTasks(deletingTask.id));
+      setIsDeleteModalOpen(false);
+    }
   };
 
-  const handleDescriptionChange = (event, newValue) => {
-    const updatedTasks = tasks.map((task) =>
-      task.id === editingTaskId ? { ...task, description: newValue } : task
-    );
-    setTasks(updatedTasks);
+  const handleDeleteCancel = () => {
+    setDeletingTask(null);
+    setIsDeleteModalOpen(false);
   };
 
-  function handleDeleteClick(task) {
-    setDeletingTaskId(task.id);
-  }
-  function handleDeleteConfirmation() {
-    setTasks((prevTasks) =>
-      prevTasks.filter((task) => task.id !== deletingTaskId)
-    );
-    setDeletingTaskId(null); // Tutup modal setelah menghapus tugas
-  }
-  function handleDeleteCancel() {
-    setDeletingTaskId(null);
-  }
+  useEffect(() => {
+    dispatch(fetchTasks());
+  }, [dispatch]);
 
   return (
     <>
@@ -80,34 +53,22 @@ const Table = () => {
             {tasks.map((task, index) => (
               <tr key={task.id}>
                 <td>{index + 1}</td>
-                <td>{task.title}</td>
-                <td>
-                  {editingTaskId === task.id ? (
-                    <TextField
-                      defaultValue={task.description}
-                      onBlur={handleSaveClick}
-                      onChange={handleDescriptionChange}
-                    />
-                  ) : (
-                    task.description
-                  )}
-                </td>
+                <td>{task?.title}</td>
+                <td>{task?.description}</td>
                 <td>
                   <button onClick={() => handleDeleteClick(task)}>
                     Delete
                   </button>
-                  <button onClick={() => handleEditClick(task)}>Edit</button>
+                  <button>Edit</button>
                 </td>
               </tr>
             ))}
-            {deletingTaskId !== null && (
+            {deletingTask !== null && ( // Ganti deletingTaskId dengan deletingTask
               <Dialog
-                hidden={false}
+                hidden={!isDeleteModalOpen}
                 dialogContentProps={{
                   type: DialogType.normal,
-                  title: `Apakah kamu yakin ingin menghapus ${
-                    tasks.find((task) => task.id === deletingTaskId).title
-                  }?`,
+                  title: `Apakah kamu yakin ingin menghapus ${deletingTask.title}?`, // Gunakan deletingTask.title untuk menampilkan judul tugas yang akan dihapus
                 }}
                 modalProps={{
                   isBlocking: true,

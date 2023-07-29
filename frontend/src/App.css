@@ -123,9 +123,14 @@ td button {
   width: 50%;
 }
 
+.add-form-container h3{
+  font-size: 28px;
+}
+
 .add-form-input {
-  font-size: 20px;
+  font-size: 28px;
   margin: 5px 0 15px 0;
+  background-color: gray;
 }
 
 .add-form-button {
