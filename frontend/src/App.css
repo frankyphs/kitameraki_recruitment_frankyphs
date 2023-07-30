@@ -27,15 +27,6 @@
   width:  80%;
 }
 
-/* .sidebar-button {
-  border: none;
-  font-size: 24px;
-  background-color: #9DB2BF;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-  padding: 30px;
-  margin: 2px 5px;
-  border-radius: 8px;
-} */
 
 .sidebar-container h2{
   margin: 10px auto;
@@ -43,16 +34,6 @@
   font-weight: 600 ;
 }
 
-/* .sidebar-button:hover{
-  border: none;
-  font-size: 30px;
-  color:#fff;
-  background-color: #526D82;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-  padding: 30px;
-  margin: 2px 5px;
-  border-radius: 8px;
-} */
 
 .nav-link {
   display: inline-block;
@@ -107,7 +88,7 @@
 }
 
 td button {
-  background-color: red;
+  background-color: #9DB2BF;
   border-style: none;
   font-size: 20px;
   font-weight: 400;
@@ -115,6 +96,17 @@ td button {
   border-radius: 4px;
   margin: 2px 4px;
   padding: 8px 10px;
+}
+
+td button{
+  cursor: pointer;
+}
+
+.button-delete:hover{
+  background-color: red;
+}
+.button-edit:hover{
+  background-color: #5F7D8E;
 }
 
 .add-form-container {
@@ -135,4 +127,9 @@ td button {
 .add-form-button {
   font-size: 20px;
   margin-top: 10px;
+}
+
+.button-page{
+  display: flex;
+  justify-content: center;
 }

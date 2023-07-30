@@ -9,10 +9,8 @@ import {
   PrimaryButton,
   TextField,
 } from "@fluentui/react";
-
 const Table = () => {
   const { tasks } = useSelector((state) => state.tasks);
-
   const dispatch = useDispatch();
   const [deletingTask, setDeletingTask] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -21,6 +19,10 @@ const Table = () => {
     title: "",
     description: "",
   });
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const limitPerPage = 5;
 
   // Delete
   const handleDeleteClick = (task) => {
@@ -66,8 +68,16 @@ const Table = () => {
 
   // Read
   useEffect(() => {
-    dispatch(fetchTasks());
-  }, [dispatch]);
+    dispatch(fetchTasks(currentPage, limitPerPage));
+  }, [dispatch, currentPage]);
+
+  const goToNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const goToPreviousPage = () => {
+    setCurrentPage((prevPage) => prevPage - 1);
+  };
 
   return (
     <>
@@ -89,10 +99,20 @@ const Table = () => {
                 <td>{task?.title}</td>
                 <td>{task?.description}</td>
                 <td>
-                  <button onClick={() => handleDeleteClick(task)}>
-                    Delete
+                  <button
+                    onClick={() => handleDeleteClick(task)}
+                    className="button-delete"
+                    title="Delete"
+                  >
+                    <i className="fas fa-trash-alt"></i>
                   </button>
-                  <button onClick={() => handleEditClick(task)}>Edit</button>
+                  <button
+                    onClick={() => handleEditClick(task)}
+                    className="button-edit"
+                    title="Edit"
+                  >
+                    <i className="fas fa-edit"></i>
+                  </button>
                 </td>
               </tr>
             ))}
@@ -155,6 +175,18 @@ const Table = () => {
             )}
           </tbody>
         </table>
+        <div className="button-page">
+          <DefaultButton
+            text="Previous"
+            onClick={goToPreviousPage}
+            disabled={currentPage === 1}
+          />
+          <DefaultButton
+            text="Next"
+            onClick={goToNextPage}
+            disabled={tasks.length < limitPerPage}
+          />
+        </div>
       </div>
     </>
   );

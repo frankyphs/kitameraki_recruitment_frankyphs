@@ -7,19 +7,23 @@ export const getTasks = (payload) => ({
 
 const baseUrl = "http://localhost:3000";
 
-export const fetchTasks = () => async (dispatch) => {
-  try {
-    const response = await fetch(`${baseUrl}/tasks`);
-    if (!response.ok) {
-      throw { name: "error" };
-    }
-    const jsonData = await response.json();
+export const fetchTasks =
+  (page = 1, limit = 10) =>
+  async (dispatch) => {
+    try {
+      const response = await fetch(
+        `${baseUrl}/tasks?page=${page}&limit=${limit}`
+      );
+      if (!response.ok) {
+        throw { name: "error" };
+      }
+      const jsonData = await response.json();
 
-    dispatch(getTasks(jsonData));
-  } catch (err) {
-    console.log(err);
-  }
-};
+      dispatch(getTasks(jsonData));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
 export const deleteTasks = (id) => async (dispatch) => {
   try {
