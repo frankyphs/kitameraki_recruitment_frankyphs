@@ -134,7 +134,7 @@ td button{
   justify-content: center;
 }
 
-.component-list {
+/* .component-list {
   border: 1px solid #ddd;
   padding: 16px;
   width: 200px;
@@ -152,6 +152,43 @@ td button{
   border: 1px solid #ddd;
   padding: 8px;
   margin-bottom: 8px;
+}
+
+button {
+  margin-top: 8px;
+  cursor: pointer;
+}
+ */
+
+
+ .form-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.component-list {
+  border: 1px solid #ddd;
+  padding: 16px;
+  min-height: 400px;
+}
+
+.form-area {
+  display: flex;
+  gap: 16px;
+  flex: 1;
+}
+
+.form-builder {
+  border: 1px solid #ddd;
+  padding: 16px;
+  min-height: 400px;
+  flex: 1;
+}
+
+.form-component {
+  border: 1px solid #ddd;
+  padding: 8px;
 }
 
 button {

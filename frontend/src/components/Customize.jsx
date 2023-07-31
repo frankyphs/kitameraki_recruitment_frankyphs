@@ -2,13 +2,19 @@ import { useState } from "react";
 import { Stack, TextField, DatePicker, SpinButton } from "@fluentui/react";
 
 const TaskForm = () => {
-  const [formComponents, setFormComponents] = useState([]);
+  const [leftColumnComponents, setLeftColumnComponents] = useState([]);
+  const [rightColumnComponents, setRightColumnComponents] = useState([]);
 
-  const handleDrop = (e, id) => {
+  const handleDrop = (e, column) => {
     e.preventDefault();
     const componentType = e.dataTransfer.getData("componentType");
-    if (componentType && !formComponents.includes(id)) {
-      setFormComponents([...formComponents, { id, type: componentType }]);
+    if (componentType) {
+      const newComponent = { id: Math.random(), type: componentType };
+      if (column === "column-left") {
+        setLeftColumnComponents([...leftColumnComponents, newComponent]);
+      } else if (column === "column-right") {
+        setRightColumnComponents([...rightColumnComponents, newComponent]);
+      }
     }
   };
 
@@ -16,14 +22,20 @@ const TaskForm = () => {
     e.preventDefault();
   };
 
-  const handleRemoveComponent = (id) => {
-    setFormComponents(
-      formComponents.filter((component) => component.id !== id)
-    );
+  const handleRemoveComponent = (id, column) => {
+    if (column === "column-left") {
+      setLeftColumnComponents(
+        leftColumnComponents.filter((component) => component.id !== id)
+      );
+    } else if (column === "column-right") {
+      setRightColumnComponents(
+        rightColumnComponents.filter((component) => component.id !== id)
+      );
+    }
   };
 
-  const renderFormComponents = () => {
-    return formComponents.map((component) => {
+  const renderFormComponents = (components, column) => {
+    return components.map((component) => {
       let componentElement;
       switch (component.type) {
         case "TextField":
@@ -42,7 +54,7 @@ const TaskForm = () => {
       return (
         <div key={component.id} className="form-component">
           {componentElement}
-          <button onClick={() => handleRemoveComponent(component.id)}>
+          <button onClick={() => handleRemoveComponent(component.id, column)}>
             Remove
           </button>
         </div>
@@ -84,15 +96,26 @@ const TaskForm = () => {
           SpinButton
         </div>
       </Stack>
-      <Stack
-        className="form-builder"
-        onDrop={(e) => handleDrop(e, "column-right")}
-        onDragOver={handleDragOver}
-        tokens={{ childrenGap: 8 }}
-      >
-        <h2>Form Builder:</h2>
-        {renderFormComponents()}
-      </Stack>
+      <div className="form-area">
+        <Stack
+          className="form-builder"
+          onDrop={(e) => handleDrop(e, "column-left")}
+          onDragOver={handleDragOver}
+          tokens={{ childrenGap: 8 }}
+        >
+          <h2>Form Builder (Column Left):</h2>
+          {renderFormComponents(leftColumnComponents, "column-left")}
+        </Stack>
+        <Stack
+          className="form-builder"
+          onDrop={(e) => handleDrop(e, "column-right")}
+          onDragOver={handleDragOver}
+          tokens={{ childrenGap: 8 }}
+        >
+          <h2>Form Builder (Column Right):</h2>
+          {renderFormComponents(rightColumnComponents, "column-right")}
+        </Stack>
+      </div>
     </Stack>
   );
 };
