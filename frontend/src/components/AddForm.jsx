@@ -3,6 +3,7 @@ import { TextField, PrimaryButton } from "@fluentui/react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addTask } from "../actions/actionCreator";
+import { NavLink } from "react-router-dom";
 
 const AddForm = () => {
   const dispatch = useDispatch();
@@ -44,6 +45,9 @@ const AddForm = () => {
         </div>
       )}
       <div className="add-form-container">
+        <NavLink to="/customize-form" style={{ fontSize: "24px" }}>
+          Customize the form
+        </NavLink>
         <h3>Input Task`s Name</h3>
         <TextField
           value={formData.title}

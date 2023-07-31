@@ -133,3 +133,28 @@ td button{
   display: flex;
   justify-content: center;
 }
+
+.component-list {
+  border: 1px solid #ddd;
+  padding: 16px;
+  width: 200px;
+  min-height: 400px;
+}
+
+.form-builder {
+  border: 1px solid #ddd;
+  padding: 16px;
+  flex: 1;
+  min-height: 400px;
+}
+
+.form-component {
+  border: 1px solid #ddd;
+  padding: 8px;
+  margin-bottom: 8px;
+}
+
+button {
+  margin-top: 8px;
+  cursor: pointer;
+}
