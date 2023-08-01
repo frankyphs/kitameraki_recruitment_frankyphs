@@ -1,17 +1,30 @@
-import { useState } from "react";
-import { TextField, PrimaryButton } from "@fluentui/react";
+import { useState, useEffect } from "react";
+import {
+  TextField,
+  PrimaryButton,
+  DatePicker,
+  SpinButton,
+} from "@fluentui/react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { addTask } from "../actions/actionCreator";
+import { useDispatch, useSelector } from "react-redux";
+import { addTask, saveTemplate } from "../actions/actionCreator";
 import { NavLink } from "react-router-dom";
 
 const AddForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { leftColumnComponents, rightColumnComponents } = useSelector(
+    (state) => state.template
+  );
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
   });
+
+  useEffect(() => {
+    dispatch(saveTemplate(leftColumnComponents, rightColumnComponents));
+  }, [dispatch, leftColumnComponents, rightColumnComponents]);
 
   const [error, setError] = useState({
     show: false,
@@ -39,6 +52,7 @@ const AddForm = () => {
   return (
     <>
       <h1>Add Form</h1>
+      <p>Ini isi {JSON.stringify(leftColumnComponents)} </p>
       {error.show && (
         <div style={{ fontSize: "22px", color: "red", marginLeft: "14px" }}>
           {error.message}
@@ -68,7 +82,40 @@ const AddForm = () => {
 
         {/* Tambah input kustomisasi form disini */}
 
-        {/* Tambah input kustomisasi form disini */}
+        <div className="customize-form-adding">
+          {/* Render leftColumnComponents */}
+          {leftColumnComponents &&
+            leftColumnComponents.map((component) => (
+              <div key={component.id}>
+                {component.name}
+                {/* Render the actual component element here */}
+                {/* For example, if the component type is "TextField": */}
+                {component.type === "TextField" && (
+                  <TextField placeholder="Enter text" />
+                )}
+                {component.type === "SpinButton" && <SpinButton />}
+                {component.type === "DatePicker" && <DatePicker />}
+                {/* For other types, you can add similar conditions */}
+              </div>
+            ))}
+
+          {/* Render rightColumnComponents */}
+          {rightColumnComponents &&
+            rightColumnComponents.map((component) => (
+              <div key={component.id}>
+                {component.name}
+                {/* Render the actual component element here */}
+                {/* For example, if the component type is "DatePicker": */}
+                {component.type === "TextField" && (
+                  <TextField placeholder="Enter text" />
+                )}
+                {component.type === "SpinButton" && <SpinButton />}
+                {component.type === "DatePicker" && <DatePicker />}
+                {/* For other types, you can add similar conditions */}
+              </div>
+            ))}
+          {/* Tambah input kustomisasi form disini */}
+        </div>
 
         <PrimaryButton className="add-form-button" onClick={handleSubmit}>
           Submit

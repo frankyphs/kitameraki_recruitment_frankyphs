@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { saveTemplate } from "../actions/actionCreator";
 import {
   Stack,
   TextField,
@@ -10,8 +12,12 @@ import {
   DefaultButton,
   PrimaryButton,
 } from "@fluentui/react";
+import { useNavigate } from "react-router-dom";
 
 const TaskForm = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [leftColumnComponents, setLeftColumnComponents] = useState([]);
   const [rightColumnComponents, setRightColumnComponents] = useState([]);
   const [showDialog, setShowDialog] = useState(false);
@@ -145,6 +151,10 @@ const TaskForm = () => {
       leftColumnComponents,
       rightColumnComponents,
     });
+
+    // Dispatch the action to save the template data to Redux store
+    dispatch(saveTemplate(leftColumnComponents, rightColumnComponents));
+    navigate("/add-task");
   };
 
   return (

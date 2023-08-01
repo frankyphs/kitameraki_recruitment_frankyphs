@@ -1,4 +1,4 @@
-import { FETCH_TASKS } from "./actionType";
+import { FETCH_TASKS, FETCH_FORM } from "./actionType";
 
 export const getTasks = (payload) => ({
   type: FETCH_TASKS,
@@ -89,3 +89,11 @@ export const editTask = (id, payload) => async (dispatch) => {
     console.log(err);
   }
 };
+
+export const saveTemplate = (leftColumnComponents, rightColumnComponents) => ({
+  type: FETCH_FORM,
+  payload: {
+    leftColumnComponents,
+    rightColumnComponents,
+  },
+});

@@ -179,3 +179,9 @@ button {
   margin-top: 8px;
   cursor: pointer;
 }
+
+.customize-form-adding{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
