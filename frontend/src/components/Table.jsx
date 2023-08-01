@@ -125,8 +125,6 @@ const Table = () => {
   return (
     <>
       <h1>List of My Tasks</h1>
-      <p>{JSON.stringify(tasks)}</p>
-      <p>{JSON.stringify(editingTaskData)}</p>
       <div className="table-container">
         <table>
           <thead>
