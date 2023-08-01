@@ -1,25 +1,64 @@
 import { useState } from "react";
-import { Stack, TextField, DatePicker, SpinButton } from "@fluentui/react";
+import {
+  Stack,
+  TextField,
+  DatePicker,
+  SpinButton,
+  Dialog,
+  DialogType,
+  DialogFooter,
+  DefaultButton,
+  PrimaryButton,
+} from "@fluentui/react";
 
 const TaskForm = () => {
   const [leftColumnComponents, setLeftColumnComponents] = useState([]);
   const [rightColumnComponents, setRightColumnComponents] = useState([]);
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogInputValue, setDialogInputValue] = useState("");
+  const [currentDroppedComponent, setCurrentDroppedComponent] = useState(null);
+  const [currentDroppedColumn, setCurrentDroppedColumn] = useState("");
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
 
   const handleDrop = (e, column) => {
     e.preventDefault();
     const componentType = e.dataTransfer.getData("componentType");
     if (componentType) {
-      const newComponent = { id: Math.random(), type: componentType };
-      if (column === "column-left") {
-        setLeftColumnComponents([...leftColumnComponents, newComponent]);
-      } else if (column === "column-right") {
-        setRightColumnComponents([...rightColumnComponents, newComponent]);
-      }
+      setCurrentDroppedComponent({ type: componentType });
+      setCurrentDroppedColumn(column);
+      setShowDialog(true);
     }
   };
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
+  const handleDialogInputChange = (event) => {
+    setDialogInputValue(event.target.value);
+  };
+
+  const handleDialogSave = () => {
+    setShowDialog(false);
+    const newComponent = {
+      ...currentDroppedComponent,
+      id: Math.random(),
+      name: dialogInputValue,
+    };
+    if (currentDroppedColumn === "column-left") {
+      setLeftColumnComponents([...leftColumnComponents, newComponent]);
+    } else if (currentDroppedColumn === "column-right") {
+      setRightColumnComponents([...rightColumnComponents, newComponent]);
+    }
+    setCurrentDroppedComponent(null);
+    setCurrentDroppedColumn("");
+    setDialogInputValue("");
+  };
+
+  const handleDialogCancel = () => {
+    setShowDialog(false);
+    setCurrentDroppedComponent(null);
+    setCurrentDroppedColumn("");
+    setDialogInputValue("");
   };
 
   const handleRemoveComponent = (id, column) => {
@@ -31,6 +70,38 @@ const TaskForm = () => {
       setRightColumnComponents(
         rightColumnComponents.filter((component) => component.id !== id)
       );
+    }
+  };
+
+  const handleMoveComponentUp = (id, column) => {
+    const components =
+      column === "column-left" ? leftColumnComponents : rightColumnComponents;
+    const index = components.findIndex((component) => component.id === id);
+    if (index > 0) {
+      const updatedComponents = [...components];
+      const [movedComponent] = updatedComponents.splice(index, 1);
+      updatedComponents.splice(index - 1, 0, movedComponent);
+      if (column === "column-left") {
+        setLeftColumnComponents(updatedComponents);
+      } else {
+        setRightColumnComponents(updatedComponents);
+      }
+    }
+  };
+
+  const handleMoveComponentDown = (id, column) => {
+    const components =
+      column === "column-left" ? leftColumnComponents : rightColumnComponents;
+    const index = components.findIndex((component) => component.id === id);
+    if (index < components.length - 1) {
+      const updatedComponents = [...components];
+      const [movedComponent] = updatedComponents.splice(index, 1);
+      updatedComponents.splice(index + 1, 0, movedComponent);
+      if (column === "column-left") {
+        setLeftColumnComponents(updatedComponents);
+      } else {
+        setRightColumnComponents(updatedComponents);
+      }
     }
   };
 
@@ -53,12 +124,26 @@ const TaskForm = () => {
 
       return (
         <div key={component.id} className="form-component">
+          <div>{component.name}</div>
           {componentElement}
           <button onClick={() => handleRemoveComponent(component.id, column)}>
             Remove
           </button>
+          <button onClick={() => handleMoveComponentUp(component.id, column)}>
+            Move Up
+          </button>
+          <button onClick={() => handleMoveComponentDown(component.id, column)}>
+            Move Down
+          </button>
         </div>
       );
+    });
+  };
+
+  const handleSaveTemplate = () => {
+    console.log("Template saved:", {
+      leftColumnComponents,
+      rightColumnComponents,
     });
   };
 
@@ -95,6 +180,7 @@ const TaskForm = () => {
         >
           SpinButton
         </div>
+        <PrimaryButton text="Save Template" onClick={handleSaveTemplate} />
       </Stack>
       <div className="form-area">
         <Stack
@@ -116,6 +202,24 @@ const TaskForm = () => {
           {renderFormComponents(rightColumnComponents, "column-right")}
         </Stack>
       </div>
+      <Dialog
+        hidden={!showDialog}
+        onDismiss={handleDialogCancel}
+        dialogContentProps={{
+          type: DialogType.normal,
+          title: "Enter Component Name",
+        }}
+      >
+        <TextField
+          label="Component Name"
+          value={dialogInputValue}
+          onChange={handleDialogInputChange}
+        />
+        <DialogFooter>
+          <PrimaryButton text="Yes" onClick={handleDialogSave} />
+          <DefaultButton text="No" onClick={handleDialogCancel} />
+        </DialogFooter>
+      </Dialog>
     </Stack>
   );
 };

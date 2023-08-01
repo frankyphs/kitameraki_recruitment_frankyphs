@@ -55,13 +55,17 @@
   background-color: #5F7D8E;
 }
 
+.fas {
+  margin-left: 7px;
+}
+
 .feature-container h1{
   padding: 10px 18px;
 }
 
 .table-container{
   margin: 0 auto;
-  width: 100%;
+  width: 95%;
 }
 
 .table-container table {
@@ -70,7 +74,7 @@
   font-size: 28px;
   font-weight: 400;
   margin: 20px;
-  width: 90%;
+  width: 100%;
 }
 
 .table-container th,
@@ -109,9 +113,9 @@ td button{
   background-color: #5F7D8E;
 }
 
+/* ---------------------------------------------- */
 .add-form-container {
   margin:20px 10px;
-  width: 50%;
 }
 
 .add-form-container h3{
@@ -134,31 +138,11 @@ td button{
   justify-content: center;
 }
 
-/* .component-list {
-  border: 1px solid #ddd;
-  padding: 16px;
-  width: 200px;
-  min-height: 400px;
-}
 
-.form-builder {
-  border: 1px solid #ddd;
-  padding: 16px;
-  flex: 1;
-  min-height: 400px;
-}
 
-.form-component {
-  border: 1px solid #ddd;
-  padding: 8px;
-  margin-bottom: 8px;
-}
 
-button {
-  margin-top: 8px;
-  cursor: pointer;
-}
- */
+/* --------------------------------------- */
+
 
 
  .form-container {
