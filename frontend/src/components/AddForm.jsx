@@ -84,36 +84,41 @@ const AddForm = () => {
 
         <div className="customize-form-adding">
           {/* Render leftColumnComponents */}
-          {leftColumnComponents &&
-            leftColumnComponents.map((component) => (
-              <div key={component.id}>
-                {component.name}
-                {/* Render the actual component element here */}
-                {/* For example, if the component type is "TextField": */}
-                {component.type === "TextField" && (
-                  <TextField placeholder="Enter text" />
-                )}
-                {component.type === "SpinButton" && <SpinButton />}
-                {component.type === "DatePicker" && <DatePicker />}
-                {/* For other types, you can add similar conditions */}
-              </div>
-            ))}
+          <div className="left-custom-form">
+            {leftColumnComponents &&
+              leftColumnComponents.map((component) => (
+                <div key={component.id} className="custom-component-form">
+                  <h3>{component.name}</h3>
+                  {/* Render the actual component element here */}
+                  {/* For example, if the component type is "TextField": */}
+                  {component.type === "TextField" && (
+                    <TextField placeholder="Enter text" />
+                  )}
+                  {component.type === "SpinButton" && <SpinButton />}
+                  {component.type === "DatePicker" && <DatePicker />}
+                  {/* For other types, you can add similar conditions */}
+                </div>
+              ))}
+          </div>
 
           {/* Render rightColumnComponents */}
-          {rightColumnComponents &&
-            rightColumnComponents.map((component) => (
-              <div key={component.id}>
-                {component.name}
-                {/* Render the actual component element here */}
-                {/* For example, if the component type is "DatePicker": */}
-                {component.type === "TextField" && (
-                  <TextField placeholder="Enter text" />
-                )}
-                {component.type === "SpinButton" && <SpinButton />}
-                {component.type === "DatePicker" && <DatePicker />}
-                {/* For other types, you can add similar conditions */}
-              </div>
-            ))}
+          <div className="right-custom-form">
+            {rightColumnComponents &&
+              rightColumnComponents.map((component) => (
+                <div key={component.id} className="custom-component-form">
+                  <h3>{component.name}</h3>
+                  {/* Render the actual component element here */}
+                  {/* For example, if the component type is "DatePicker": */}
+                  {component.type === "TextField" && (
+                    <TextField placeholder="Enter text" />
+                  )}
+                  {component.type === "SpinButton" && <SpinButton />}
+                  {component.type === "DatePicker" && <DatePicker />}
+                  {/* For other types, you can add similar conditions */}
+                </div>
+              ))}
+          </div>
+
           {/* Tambah input kustomisasi form disini */}
         </div>
 

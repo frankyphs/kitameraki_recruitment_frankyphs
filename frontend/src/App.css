@@ -185,3 +185,20 @@ button {
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
+
+.left-custom-form, .right-custom-form{
+  display: flex;
+  flex-direction: column;
+}
+
+.left-custom-form h3{
+  font-size: 28px ;
+}
+
+.right-custom-form h3{
+  font-size: 28px ;
+}
+
+.custom-component-form{
+  margin-bottom: 20px;
+}

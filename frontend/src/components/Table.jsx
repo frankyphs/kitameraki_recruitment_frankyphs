@@ -20,6 +20,12 @@ const Table = () => {
     description: "",
   });
 
+  const { leftColumnComponents, rightColumnComponents } = useSelector(
+    (state) => state.template
+  );
+
+  const [additionalColumns, setAdditionalColumns] = useState([]);
+
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const limitPerPage = 5;
@@ -71,6 +77,28 @@ const Table = () => {
     dispatch(fetchTasks(currentPage, limitPerPage));
   }, [dispatch, currentPage]);
 
+  useEffect(() => {
+    // Simpan komponen tambahan ke dalam satu array
+    const leftColumns = leftColumnComponents.map((column) => {
+      return {
+        name: column.name,
+        component: column.component,
+        key: `left_${column.name}`,
+      };
+    });
+
+    const rightColumns = rightColumnComponents.map((column) => {
+      return {
+        name: column.name,
+        component: column.component,
+        key: `right_${column.name}`,
+      };
+    });
+
+    // Gabungkan dan set state untuk additionalColumns
+    setAdditionalColumns([...leftColumns, ...rightColumns]);
+  }, [leftColumnComponents, rightColumnComponents]);
+
   const goToNextPage = () => {
     setCurrentPage((prevPage) => prevPage + 1);
   };
@@ -89,6 +117,9 @@ const Table = () => {
               <th>No</th>
               <th>Task Name</th>
               <th>Task Description</th>
+              {additionalColumns.map((column) => (
+                <th key={column.key}>{column.name}</th>
+              ))}
               <th>Action</th>
             </tr>
           </thead>
@@ -98,6 +129,9 @@ const Table = () => {
                 <td>{index + 1}</td>
                 <td>{task?.title}</td>
                 <td>{task?.description}</td>
+                {additionalColumns.map((column) => (
+                  <td key={column.key}>{column.component}</td>
+                ))}
                 <td>
                   <button
                     onClick={() => handleDeleteClick(task)}
