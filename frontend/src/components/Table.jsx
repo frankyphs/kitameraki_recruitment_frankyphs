@@ -24,6 +24,11 @@ const Table = () => {
     (state) => state.template
   );
 
+  const [error, setError] = useState({
+    show: false,
+    message: "",
+  });
+
   const [additionalColumns, setAdditionalColumns] = useState([]);
 
   // Pagination
@@ -55,7 +60,7 @@ const Table = () => {
       title: task.title,
       description: task.description,
     });
-    setEditingTask(task); // Set task yang sedang di-edit
+    setEditingTask(task);
     setIsEditModalOpen(true);
   };
 
@@ -68,8 +73,12 @@ const Table = () => {
   };
 
   const handleEditConfirmation = () => {
-    dispatch(editTask(editingTask.id, formData)); // Menggunakan editingTask.id sebagai ID
-    setIsEditModalOpen(false);
+    if (formData.title.trim() === "" || formData.description.trim() === "") {
+      setError({ show: true, message: "Please fill all the field" });
+    } else {
+      dispatch(editTask(editingTask.id, formData));
+      setIsEditModalOpen(false);
+    }
   };
 
   // Read
@@ -78,7 +87,6 @@ const Table = () => {
   }, [dispatch, currentPage]);
 
   useEffect(() => {
-    // Simpan komponen tambahan ke dalam satu array
     const leftColumns = leftColumnComponents.map((column) => {
       return {
         name: column.name,
@@ -95,7 +103,6 @@ const Table = () => {
       };
     });
 
-    // Gabungkan dan set state untuk additionalColumns
     setAdditionalColumns([...leftColumns, ...rightColumns]);
   }, [leftColumnComponents, rightColumnComponents]);
 
@@ -129,9 +136,14 @@ const Table = () => {
                 <td>{index + 1}</td>
                 <td>{task?.title}</td>
                 <td>{task?.description}</td>
-                {additionalColumns.map((column) => (
-                  <td key={column.key}>{column.component}</td>
-                ))}
+                {Object.keys(task).map((key) => {
+                  const isReservedKey = ["id", "title", "description"].includes(
+                    key
+                  );
+                  if (!isReservedKey) {
+                    return <td key={key}>{task[key] ?? "null"}</td>;
+                  }
+                })}
                 <td>
                   <button
                     onClick={() => handleDeleteClick(task)}
@@ -150,6 +162,7 @@ const Table = () => {
                 </td>
               </tr>
             ))}
+
             {deletingTask !== null && (
               <Dialog
                 hidden={!isDeleteModalOpen}
@@ -182,6 +195,17 @@ const Table = () => {
                   isBlocking: true,
                 }}
               >
+                {error.show && (
+                  <div
+                    style={{
+                      fontSize: "22px",
+                      color: "red",
+                      marginLeft: "14px",
+                    }}
+                  >
+                    {error.message}
+                  </div>
+                )}
                 <div>
                   <TextField
                     label="Title"

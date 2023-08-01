@@ -25,6 +25,10 @@ const TaskForm = () => {
   const [dialogInputValue, setDialogInputValue] = useState("");
   const [currentDroppedComponent, setCurrentDroppedComponent] = useState(null);
   const [currentDroppedColumn, setCurrentDroppedColumn] = useState("");
+  const [error, setError] = useState({
+    show: false,
+    message: "",
+  });
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -45,20 +49,27 @@ const TaskForm = () => {
   };
 
   const handleDialogSave = () => {
-    setShowDialog(false);
-    const newComponent = {
-      ...currentDroppedComponent,
-      id: Math.random(),
-      name: dialogInputValue,
-    };
-    if (currentDroppedColumn === "column-left") {
-      setLeftColumnComponents([...leftColumnComponents, newComponent]);
-    } else if (currentDroppedColumn === "column-right") {
-      setRightColumnComponents([...rightColumnComponents, newComponent]);
+    if (dialogInputValue.trim() === "") {
+      // error message if the input is empty
+      setError({ show: true, message: "Please fill the name" });
+    } else {
+      setShowDialog(false);
+      const newComponent = {
+        ...currentDroppedComponent,
+        id: Math.random(),
+        name: dialogInputValue,
+      };
+
+      if (currentDroppedColumn === "column-left") {
+        setLeftColumnComponents([...leftColumnComponents, newComponent]);
+      } else if (currentDroppedColumn === "column-right") {
+        setRightColumnComponents([...rightColumnComponents, newComponent]);
+      }
+
+      setCurrentDroppedComponent(null);
+      setCurrentDroppedColumn("");
+      setDialogInputValue("");
     }
-    setCurrentDroppedComponent(null);
-    setCurrentDroppedColumn("");
-    setDialogInputValue("");
   };
 
   const handleDialogCancel = () => {
@@ -153,7 +164,6 @@ const TaskForm = () => {
       rightColumnComponents,
     });
 
-    // Dispatch the action to save the template data to Redux store
     dispatch(saveTemplate(leftColumnComponents, rightColumnComponents));
     navigate("/add-task");
   };
@@ -166,31 +176,35 @@ const TaskForm = () => {
         onDragOver={handleDragOver}
         tokens={{ childrenGap: 8 }}
       >
-        <h2>Drag components here:</h2>
+        <h2>Drag components dari sini:</h2>
         <div
+          className="draggable-component"
           draggable
           onDragStart={(e) =>
             e.dataTransfer.setData("componentType", "TextField")
           }
         >
-          TextField
+          <i className="fas fa-font"></i> TextField
         </div>
         <div
+          className="draggable-component"
           draggable
           onDragStart={(e) =>
             e.dataTransfer.setData("componentType", "DatePicker")
           }
         >
-          DatePicker
+          <i className="far fa-calendar-alt"></i> DatePicker
         </div>
         <div
+          className="draggable-component"
           draggable
           onDragStart={(e) =>
             e.dataTransfer.setData("componentType", "SpinButton")
           }
         >
-          SpinButton
+          <i className="fas fa-cog"></i> SpinButton
         </div>
+
         <PrimaryButton text="Save Template" onClick={handleSaveTemplate} />
       </Stack>
       <div className="form-area">
@@ -221,6 +235,11 @@ const TaskForm = () => {
           title: "Enter Component Name",
         }}
       >
+        {error.show && (
+          <div style={{ fontSize: "18px", color: "red", textAlign: "center" }}>
+            {error.message}
+          </div>
+        )}
         <TextField
           label="Component Name"
           value={dialogInputValue}

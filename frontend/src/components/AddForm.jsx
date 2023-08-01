@@ -26,6 +26,14 @@ const AddForm = () => {
     dispatch(saveTemplate(leftColumnComponents, rightColumnComponents));
   }, [dispatch, leftColumnComponents, rightColumnComponents]);
 
+  const [customFormValues, setCustomFormValues] = useState({});
+  const handleCustomFormChange = (name, value) => {
+    setCustomFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  };
+
   const [error, setError] = useState({
     show: false,
     message: "",
@@ -44,7 +52,9 @@ const AddForm = () => {
     if (formData.title.trim() === "" || formData.description.trim() === "") {
       setError({ show: true, message: "Please fill all the field" });
     } else {
-      dispatch(addTask(formData));
+      const mergedFormData = { ...formData, ...customFormValues };
+      dispatch(addTask(mergedFormData));
+      console.log(mergedFormData, "ini merge form data");
       navigate("/");
     }
   };
@@ -52,7 +62,6 @@ const AddForm = () => {
   return (
     <>
       <h1>Add Form</h1>
-      <p>Ini isi {JSON.stringify(leftColumnComponents)} </p>
       {error.show && (
         <div style={{ fontSize: "22px", color: "red", marginLeft: "14px" }}>
           {error.message}
@@ -61,6 +70,7 @@ const AddForm = () => {
       <div className="add-form-container">
         <NavLink to="/customize-form" style={{ fontSize: "24px" }}>
           Customize the form
+          <i className="fas fa-cog"></i>
         </NavLink>
         <h3>Input Task`s Name</h3>
         <TextField
@@ -89,14 +99,35 @@ const AddForm = () => {
               leftColumnComponents.map((component) => (
                 <div key={component.id} className="custom-component-form">
                   <h3>{component.name}</h3>
-                  {/* Render the actual component element here */}
-                  {/* For example, if the component type is "TextField": */}
                   {component.type === "TextField" && (
-                    <TextField placeholder="Enter text" />
+                    <TextField
+                      placeholder="Enter text"
+                      value={customFormValues[component.name] || ""}
+                      onChange={(e) =>
+                        handleCustomFormChange(component.name, e.target.value)
+                      }
+                      className="custom-input"
+                    />
                   )}
-                  {component.type === "SpinButton" && <SpinButton />}
-                  {component.type === "DatePicker" && <DatePicker />}
-                  {/* For other types, you can add similar conditions */}
+                  {component.type === "SpinButton" && (
+                    <SpinButton
+                      value={customFormValues[component.name] || ""}
+                      onChange={(value) =>
+                        handleCustomFormChange(component.name, value)
+                      }
+                      className="custom-input"
+                    />
+                  )}
+                  {component.type === "DatePicker" && (
+                    <DatePicker
+                      value={customFormValues[component.name] || null}
+                      onSelectDate={(date) =>
+                        handleCustomFormChange(component.name, date)
+                      }
+                      placeholder="Enter Date"
+                      className="custom-input"
+                    />
+                  )}
                 </div>
               ))}
           </div>
@@ -107,19 +138,37 @@ const AddForm = () => {
               rightColumnComponents.map((component) => (
                 <div key={component.id} className="custom-component-form">
                   <h3>{component.name}</h3>
-                  {/* Render the actual component element here */}
-                  {/* For example, if the component type is "DatePicker": */}
                   {component.type === "TextField" && (
-                    <TextField placeholder="Enter text" />
+                    <TextField
+                      placeholder="Enter text"
+                      value={customFormValues[component.name] || ""}
+                      onChange={(e) =>
+                        handleCustomFormChange(component.name, e.target.value)
+                      }
+                      className="custom-input"
+                    />
                   )}
-                  {component.type === "SpinButton" && <SpinButton />}
-                  {component.type === "DatePicker" && <DatePicker />}
-                  {/* For other types, you can add similar conditions */}
+                  {component.type === "SpinButton" && (
+                    <SpinButton
+                      value={customFormValues[component.name] || ""}
+                      onChange={(value) =>
+                        handleCustomFormChange(component.name, value)
+                      }
+                      className="custom-input"
+                    />
+                  )}
+                  {component.type === "DatePicker" && (
+                    <DatePicker
+                      value={customFormValues[component.name] || null}
+                      onSelectDate={(date) =>
+                        handleCustomFormChange(component.name, date)
+                      }
+                      className="custom-input"
+                    />
+                  )}
                 </div>
               ))}
           </div>
-
-          {/* Tambah input kustomisasi form disini */}
         </div>
 
         <PrimaryButton className="add-form-button" onClick={handleSubmit}>

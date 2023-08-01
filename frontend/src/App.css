@@ -64,7 +64,7 @@
 }
 
 .table-container{
-  margin: 0 auto;
+  margin: 0;
   width: 95%;
 }
 
@@ -125,7 +125,11 @@ td button{
 .add-form-input {
   font-size: 28px;
   margin: 5px 0 15px 0;
-  background-color: gray;
+  background-color: #f2f2f2; /* Warna abu muda */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Box shadow */
+  border: none; /* Hapus border default */
+  padding: 8px 12px; /* Spasi di dalam input */
+  border-radius: 4px; /* Sudut melengkung */
 }
 
 .add-form-button {
@@ -201,4 +205,35 @@ button {
 
 .custom-component-form{
   margin-bottom: 20px;
+}
+
+.custom-input {
+  background-color: #f2f2f2; /* Warna abu muda */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Box shadow */
+  border: none; /* Hapus border default */
+  padding: 8px 12px; /* Spasi di dalam input */
+  border-radius: 4px; /* Sudut melengkung */
+  margin-bottom: 8px; /* Spasi antar input */
+}
+
+.custom-input .ms-DatePicker {
+  width: 100%; /* Lebar 100% */
+}
+
+
+/* Styling for the draggable components */
+div[draggable] {
+  cursor: move;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  display: inline-block;
+  user-select: none; /* To prevent text selection while dragging */
+}
+
+div[draggable]:hover {
+  background-color: #e0e0e0;
 }
