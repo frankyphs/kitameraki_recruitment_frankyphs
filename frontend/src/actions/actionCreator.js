@@ -67,13 +67,9 @@ export const addTask = (payload) => async (dispatch) => {
 
 export const editTask = (id, payload) => async (dispatch) => {
   try {
-    const data = {
-      title: payload.title,
-      description: payload.description,
-    };
     const opt = {
       method: "put",
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },

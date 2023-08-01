@@ -54,12 +54,15 @@ const Table = () => {
   };
 
   // Edit
+  // const [originalTaskData, setOriginalTaskData] = useState({});
+  const [editingTaskData, setEditingTaskData] = useState({});
   const [editingTask, setEditingTask] = useState(null);
   const handleEditClick = (task) => {
     setFormData({
       title: task.title,
       description: task.description,
     });
+    setEditingTaskData(task); // Simpan data asli
     setEditingTask(task);
     setIsEditModalOpen(true);
   };
@@ -74,9 +77,14 @@ const Table = () => {
 
   const handleEditConfirmation = () => {
     if (formData.title.trim() === "" || formData.description.trim() === "") {
-      setError({ show: true, message: "Please fill all the field" });
+      setError({ show: true, message: "Please fill all the fields" });
     } else {
-      dispatch(editTask(editingTask.id, formData));
+      const editedTask = {
+        ...editingTaskData, // Gunakan data asli sebagai basis
+        ...formData, // Gabungkan dengan data yang diedit
+      };
+      console.log(editedTask, "ini edittedd task");
+      dispatch(editTask(editingTask.id, editedTask));
       setIsEditModalOpen(false);
     }
   };
@@ -117,6 +125,8 @@ const Table = () => {
   return (
     <>
       <h1>List of My Tasks</h1>
+      <p>{JSON.stringify(tasks)}</p>
+      <p>{JSON.stringify(editingTaskData)}</p>
       <div className="table-container">
         <table>
           <thead>

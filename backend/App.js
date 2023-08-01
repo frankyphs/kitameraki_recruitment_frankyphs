@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -49,19 +51,18 @@ app.get(`/tasks/:id`, async (req, res) => {
 
 app.put(`/tasks/:id`, async (req, res) => {
   const taskId = parseInt(req.params.id);
-  const { title, description } = req.body;
-  if (!title || !description) {
-    return res
-      .status(400)
-      .json({ error: "Title and description are required" });
-  }
+  const editedTask = req.body;
 
   const taskIndex = tasks.findIndex((t) => t.id === taskId);
   if (taskIndex === -1) {
     return res.status(404).json({ error: "Task not found" });
   }
 
-  tasks[taskIndex] = { id: taskId, title, description };
+  tasks[taskIndex] = {
+    ...tasks[taskIndex],
+    ...editedTask,
+  };
+
   return res.json(tasks[taskIndex]);
 });
 
